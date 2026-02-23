@@ -70,6 +70,13 @@ const largeLogContent = Array.from({ length: 5101 }, (_, index) => ({
   timestamp: "2025-02-28T10:49:09.535000+05:30",
 }));
 
+const scrollLogContent = Array.from({ length: 200 }, (_, index) => ({
+  event: `scroll log line ${index}`,
+  level: "info",
+  logger: "task.stdout",
+  timestamp: "2025-02-28T10:49:09.535000+05:30",
+}));
+
 export const handlers: Array<HttpHandler> = [
   http.get("/api/v2/dags/log_grouping/dagRuns/manual__2025-02-18T12:19/taskInstances/generate/-1", () =>
     HttpResponse.json({ ...ti, dag_run_id: "manual__2025-02-18T12:19" }),
@@ -313,5 +320,21 @@ export const handlers: Array<HttpHandler> = [
       content: largeLogContent,
       continuation_token: null,
     }),
+  ),
+  http.get("/api/v2/dags/log_grouping/dagRuns/manual__2025-02-18T12:19/taskInstances/scroll_logs/-1", () =>
+    HttpResponse.json({
+      ...ti,
+      dag_run_id: "manual__2025-02-18T12:19",
+      task_display_name: "scroll_logs",
+      task_id: "scroll_logs",
+    }),
+  ),
+  http.get(
+    "/api/v2/dags/log_grouping/dagRuns/manual__2025-02-18T12:19/taskInstances/scroll_logs/logs/1",
+    () =>
+      HttpResponse.json({
+        content: scrollLogContent,
+        continuation_token: null,
+      }),
   ),
 ];
